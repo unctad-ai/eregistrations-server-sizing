@@ -93,6 +93,22 @@ export function Results() {
 
   return (
     <div className="space-y-8 max-w-5xl mx-auto">
+      {/* PRINT-ONLY HEADER */}
+      <div className="hidden print:flex items-center justify-between border-b border-slate-350 pb-4 mb-2">
+        <div>
+          <h1 className="text-2xl font-extrabold text-slate-900 font-heading">
+            eRegistrations Server Sizing Report
+          </h1>
+          <p className="text-xs text-slate-500 font-mono mt-1">
+            Official UNCTAD eRegistrations Infrastructure Specifications · Calibrated: {new Date().toLocaleDateString()}
+          </p>
+        </div>
+        <div className="text-right">
+          <span className="text-[10px] uppercase tracking-wider text-slate-400 font-mono block">Document ID</span>
+          <span className="text-xs font-bold text-slate-900 font-mono">ER-SPEC-B{r.bracket}</span>
+        </div>
+      </div>
+
       {/* Dynamic Sizing Hero Banner */}
       <div className="glass-panel p-6 sm:p-8 border-obsidian-800/80 shadow-2xl relative overflow-hidden sweep-effect">
         <div className="absolute top-0 right-0 w-48 h-48 bg-accent/5 rounded-full filter blur-3xl -z-10 animate-pulse-slow"></div>

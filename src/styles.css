@@ -84,10 +84,13 @@ h1, h2, h3, h4 {
 @media print {
   body {
     background: #ffffff !important;
+    background-image: none !important;
     color: #0f172a !important;
     font-size: 11pt !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
-  header, footer, .print\:hidden, button, a[href^="/wizard"], .collapsible-trigger {
+  header, footer, .print\:hidden, button, a[href^="/wizard"], .collapsible-trigger, nav {
     display: none !important;
   }
   main {
@@ -95,36 +98,93 @@ h1, h2, h3, h4 {
     padding: 0 !important;
     margin: 0 !important;
   }
+  
+  /* Universal Print Cleanups */
   .glass-panel {
-    background: transparent !important;
+    background: #ffffff !important;
     border: 1px solid #cbd5e1 !important;
     box-shadow: none !important;
     backdrop-filter: none !important;
     color: #0f172a !important;
   }
-  .text-obsidian-100, .text-obsidian-200, .text-slate-700, .text-slate-600 {
-    color: #334155 !important;
+
+  /* Specific dark-opacity utility class strips */
+  .bg-obsidian-950\/70, 
+  .bg-obsidian-950\/60, 
+  .bg-obsidian-950\/40, 
+  .bg-obsidian-900\/90, 
+  .bg-obsidian-900\/30,
+  .bg-obsidian-900\/40,
+  .bg-obsidian-950,
+  .bg-obsidian-900,
+  .bg-obsidian-800 {
+    background-color: #f8fafc !important;
+    color: #1e293b !important;
+    border-color: #cbd5e1 !important;
+    box-shadow: none !important;
+    background-image: none !important;
   }
-  .text-white, .text-slate-900 {
-    color: #0f172a !important;
-  }
-  .border-obsidian-800, .border-slate-200, .border-slate-100 {
+
+  /* Spec lists & Cloud SKU capsules */
+  li, .grid > div {
+    background-color: #ffffff !important;
     border-color: #e2e8f0 !important;
   }
-  .bg-obsidian-900, .bg-obsidian-950, .bg-obsidian-800, .bg-slate-50 {
+
+  /* Branded sku capsules */
+  .border-amber-500\/20,
+  .border-red-500\/20,
+  .border-blue-500\/20,
+  .bg-obsidian-950\/70 {
     background-color: #f8fafc !important;
+    border: 1px solid #cbd5e1 !important;
+    color: #1e293b !important;
   }
+
+  /* Force highly readable dark colors on text (removing white or grey text states) */
+  .text-obsidian-100, 
+  .text-obsidian-200, 
+  .text-obsidian-300, 
+  .text-obsidian-400, 
+  .text-obsidian-500, 
+  .text-slate-700, 
+  .text-slate-600 {
+    color: #334155 !important;
+  }
+  
+  .text-white, 
+  .text-slate-900,
+  strong {
+    color: #0f172a !important;
+  }
+
+  /* Fix text gradients by forcing solid color */
+  .text-transparent {
+    color: #10b981 !important;
+    background-clip: unset !important;
+    -webkit-background-clip: unset !important;
+    background-image: none !important;
+    -webkit-text-fill-color: #10b981 !important;
+  }
+
+  .border-obsidian-800, 
+  .border-slate-200, 
+  .border-slate-100,
+  .border-obsidian-850 {
+    border-color: #cbd5e1 !important;
+  }
+
   .bg-accent {
     background-color: #10b981 !important;
     color: #ffffff !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
   }
+  
   .grid {
     display: grid !important;
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 1.5rem !important;
   }
+  
   .break-inside-avoid {
     break-inside: avoid !important;
     page-break-inside: avoid !important;
