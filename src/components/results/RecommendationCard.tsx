@@ -1,49 +1,101 @@
 import type { EnvironmentCard, ServerRole } from "@/types";
-import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import { Cpu, Cloud, Server } from "lucide-react";
 
-const ENV_LABEL: Record<EnvironmentCard["env"], string> = {
-  production: "Production",
-  dev: "Development",
-  test: "Test / QA"
+const ENV_LABELS: Record<EnvironmentCard["env"], { title: string; style: string; badge: string }> = {
+  production: {
+    title: "Production Cluster",
+    style: "border-accent/40 bg-accent/5 shadow-accent/5",
+    badge: "bg-accent/10 text-accent border-accent/20"
+  },
+  dev: {
+    title: "Development Host",
+    style: "border-blue-500/30 bg-blue-500/5 shadow-blue-500/5",
+    badge: "bg-blue-500/10 text-blue-400 border-blue-500/20"
+  },
+  test: {
+    title: "Test / QA Cluster",
+    style: "border-indigo-500/30 bg-indigo-500/5 shadow-indigo-500/5",
+    badge: "bg-indigo-500/10 text-indigo-400 border-indigo-500/20"
+  }
 };
 
 const ROLE_LABEL: Record<ServerRole, string> = {
-  "all-in-one": "Single server",
-  app: "Application server",
-  db: "Database server",
-  "app-1": "Application server 1",
-  "app-2": "Application server 2",
-  "db-1": "Database server 1",
-  "db-2": "Database server 2"
+  "all-in-one": "All-in-One Server",
+  app: "Application server Node",
+  db: "Secure Database Server",
+  "app-1": "App Server 1 (Primary HA)",
+  "app-2": "App Server 2 (Secondary HA)",
+  "db-1": "Database Server 1 (Active HA)",
+  "db-2": "Database Server 2 (Standby HA)"
 };
 
 export function RecommendationCard({ card }: { card: EnvironmentCard }) {
+  const envMeta = ENV_LABELS[card.env];
+
   return (
-    <Card className="break-inside-avoid">
-      <CardHeader>
-        <h3 className="text-lg font-semibold text-slate-900">{ENV_LABEL[card.env]}</h3>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <ul className="space-y-3">
+    <div className={`glass-panel border-obsidian-850 p-6 flex flex-col justify-between break-inside-avoid relative overflow-hidden transition-all duration-300 hover:border-obsidian-750 hover:shadow-black/50 ${envMeta.style}`}>
+      <div>
+        {/* Header */}
+        <div className="flex items-center justify-between pb-4 border-b border-obsidian-800/60 mb-5">
+          <h3 className="text-base font-bold text-white uppercase tracking-wide font-heading">
+            {envMeta.title}
+          </h3>
+          <span className={`text-[10px] font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${envMeta.badge}`}>
+            {card.env}
+          </span>
+        </div>
+
+        {/* Server Specs List */}
+        <ul className="space-y-4">
           {card.servers.map((s, i) => (
-            <li key={i} className="border-l-2 border-accent pl-4">
-              <div className="text-sm font-medium text-slate-700">{ROLE_LABEL[s.role]}</div>
-              <div className="text-sm text-slate-600">
-                {s.vcpu} vCPU · {s.ramGiB} GiB RAM · {s.diskGB} GB NVMe SSD · {s.networkGbps} Gbps
+            <li key={i} className="flex gap-4 p-3 bg-obsidian-950/60 rounded-xl border border-obsidian-850/60 hover:border-obsidian-800 transition-colors">
+              <div className="p-2 h-9 w-9 rounded-lg bg-obsidian-900 border border-obsidian-800 flex items-center justify-center text-obsidian-400 mt-0.5">
+                {s.role.includes("db") ? <Server className="h-4 w-4 text-blue-400" /> : <Cpu className="h-4 w-4 text-accent" />}
+              </div>
+              <div className="space-y-1">
+                <div className="text-xs font-semibold text-obsidian-100 uppercase tracking-wider">{ROLE_LABEL[s.role]}</div>
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-obsidian-400 font-mono">
+                  <span>{s.vcpu} vCPU</span>
+                  <span className="text-obsidian-700">•</span>
+                  <span>{s.ramGiB} GB RAM</span>
+                  <span className="text-obsidian-700">•</span>
+                  <span>{s.diskGB} GB NVMe SSD</span>
+                  <span className="text-obsidian-700">•</span>
+                  <span className="text-accent/80 font-semibold">{s.networkGbps} Gbps Port</span>
+                </div>
               </div>
             </li>
           ))}
         </ul>
+      </div>
 
-        <div className="pt-3 border-t border-slate-100 text-sm">
-          <div className="text-xs uppercase tracking-wider text-slate-500 mb-2">Cloud equivalents</div>
-          <ul className="text-slate-700 space-y-1">
-            <li><span className="font-medium">AWS:</span> {card.skus.aws}</li>
-            <li><span className="font-medium">Hetzner:</span> {card.skus.hetzner}</li>
-            <li><span className="font-medium">OVH:</span> {card.skus.ovh}</li>
-          </ul>
+      {/* Cloud SKU equivalents section */}
+      <div className="mt-6 pt-5 border-t border-obsidian-800/60 text-xs">
+        <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-obsidian-400 font-mono mb-3">
+          <Cloud className="h-3.5 w-3.5 text-accent" />
+          <span>Recommended Procurement Equivalents</span>
         </div>
-      </CardContent>
-    </Card>
+        
+        <div className="grid grid-cols-3 gap-2.5">
+          {/* AWS SKU */}
+          <div className="p-2.5 bg-obsidian-950/70 border border-obsidian-850 hover:border-amber-500/20 rounded-lg text-center transition-colors">
+            <span className="text-[9px] uppercase tracking-widest text-amber-500 font-bold block mb-1">AWS</span>
+            <span className="font-mono text-obsidian-200 font-semibold break-all text-[10px]">{card.skus.aws}</span>
+          </div>
+
+          {/* Hetzner SKU */}
+          <div className="p-2.5 bg-obsidian-950/70 border border-obsidian-850 hover:border-red-500/20 rounded-lg text-center transition-colors">
+            <span className="text-[9px] uppercase tracking-widest text-red-500 font-bold block mb-1">Hetzner</span>
+            <span className="font-mono text-obsidian-200 font-semibold break-all text-[10px]">{card.skus.hetzner}</span>
+          </div>
+
+          {/* OVHcloud SKU */}
+          <div className="p-2.5 bg-obsidian-950/70 border border-obsidian-850 hover:border-blue-500/20 rounded-lg text-center transition-colors">
+            <span className="text-[9px] uppercase tracking-widest text-blue-400 font-bold block mb-1">OVH</span>
+            <span className="font-mono text-obsidian-200 font-semibold break-all text-[10px]">{card.skus.ovh}</span>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

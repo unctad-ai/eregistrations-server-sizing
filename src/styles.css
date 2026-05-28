@@ -2,12 +2,131 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body, #root { height: 100%; }
-body { @apply bg-white text-slate-900 font-sans antialiased; }
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
 
+body {
+  @apply bg-obsidian-950 text-obsidian-100 font-sans antialiased selection:bg-accent selection:text-obsidian-900;
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(16, 185, 129, 0.04) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(26, 85, 255, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(7, 10, 16, 1) 0%, rgba(11, 15, 25, 1) 100%);
+  background-attachment: fixed;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-obsidian-900;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-obsidian-700 rounded-full hover:bg-obsidian-600 transition-colors;
+}
+
+/* Utility Animations & Glassmorphism */
+.glass-panel {
+  @apply bg-obsidian-900/60 backdrop-blur-md border border-obsidian-800/80 rounded-xl shadow-2xl shadow-black/40;
+}
+
+.glow-emerald {
+  box-shadow: 0 0 20px -3px rgba(16, 185, 129, 0.2);
+}
+
+.glow-blue {
+  box-shadow: 0 0 20px -3px rgba(59, 130, 246, 0.2);
+}
+
+.glow-text-emerald {
+  text-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+}
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.03); }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s infinite ease-in-out;
+}
+
+@keyframes light-sweep {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.sweep-effect {
+  position: relative;
+  overflow: hidden;
+}
+.sweep-effect::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.1), transparent);
+  transform: translateX(-100%);
+}
+.sweep-effect:hover::after {
+  animation: light-sweep 1.2s ease-in-out;
+}
+
+/* High Fidelity Typography styles */
+h1, h2, h3, h4 {
+  @apply font-heading tracking-tight;
+}
+
+/* Specialized Print Styles sheet */
 @media print {
-  header, footer, .print\:hidden { display: none !important; }
-  main { max-width: none; padding: 0; }
-  .grid { display: block; }
-  .break-inside-avoid { break-inside: avoid; margin-bottom: 1rem; }
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    font-size: 11pt !important;
+  }
+  header, footer, .print\:hidden, button, a[href^="/wizard"], .collapsible-trigger {
+    display: none !important;
+  }
+  main {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .glass-panel {
+    background: transparent !important;
+    border: 1px solid #cbd5e1 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    color: #0f172a !important;
+  }
+  .text-obsidian-100, .text-obsidian-200, .text-slate-700, .text-slate-600 {
+    color: #334155 !important;
+  }
+  .text-white, .text-slate-900 {
+    color: #0f172a !important;
+  }
+  .border-obsidian-800, .border-slate-200, .border-slate-100 {
+    border-color: #e2e8f0 !important;
+  }
+  .bg-obsidian-900, .bg-obsidian-950, .bg-obsidian-800, .bg-slate-50 {
+    background-color: #f8fafc !important;
+  }
+  .bg-accent {
+    background-color: #10b981 !important;
+    color: #ffffff !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1.5rem !important;
+  }
+  .break-inside-avoid {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
 }
