@@ -1,0 +1,83 @@
+{
+  "questions": [
+    {
+      "id": "population",
+      "label": "What is the population this service will serve?",
+      "help": "Use the country population, or the relevant subset if the service is sectoral (e.g. number of registered businesses).",
+      "type": "single",
+      "options": [
+        { "value": "small",  "label": "Less than 3 million",  "loadScore": 1 },
+        { "value": "medium", "label": "3 to 10 million",      "loadScore": 2 },
+        { "value": "large",  "label": "More than 10 million", "loadScore": 3 }
+      ]
+    },
+    {
+      "id": "services",
+      "label": "How many services do you plan to launch in year 1?",
+      "help": "A service is a single citizen-facing procedure (e.g. business registration, building permit).",
+      "type": "single",
+      "options": [
+        { "value": "small",  "label": "1 to 5 services",     "loadScore": 1 },
+        { "value": "medium", "label": "6 to 15 services",    "loadScore": 2 },
+        { "value": "large",  "label": "16 or more services", "loadScore": 3 }
+      ]
+    },
+    {
+      "id": "applications",
+      "label": "How many applications do you expect per year?",
+      "help": "Total submissions across all services in a typical operational year.",
+      "type": "single",
+      "options": [
+        { "value": "small",  "label": "Fewer than 50,000",   "loadScore": 1 },
+        { "value": "medium", "label": "50,000 to 500,000",   "loadScore": 2 },
+        { "value": "large",  "label": "More than 500,000",   "loadScore": 3 }
+      ]
+    },
+    {
+      "id": "attachments",
+      "label": "How often do applications require document uploads?",
+      "help": "Scanned IDs, photos, contracts — anything that ends up stored as a file.",
+      "type": "single",
+      "options": [
+        { "value": "rarely",    "label": "Rarely" },
+        { "value": "sometimes", "label": "Sometimes" },
+        { "value": "most",      "label": "Most of the time" }
+      ]
+    },
+    {
+      "id": "horizon",
+      "label": "What planning horizon are you sizing for?",
+      "help": "How many years of growth the server should comfortably absorb before upgrade.",
+      "type": "single",
+      "options": [
+        { "value": "1y", "label": "1 year"  },
+        { "value": "3y", "label": "3 years" },
+        { "value": "5y", "label": "5 years" }
+      ]
+    },
+    {
+      "id": "environments",
+      "label": "Which environments do you need?",
+      "help": "Production is required. Dev and Test are optional and roughly one-third the size of Production.",
+      "type": "multi",
+      "required": true,
+      "forcedValues": ["production"],
+      "options": [
+        { "value": "production", "label": "Production (required)" },
+        { "value": "dev",        "label": "Development" },
+        { "value": "test",       "label": "Test / QA" }
+      ]
+    },
+    {
+      "id": "topology",
+      "label": "Preferred deployment topology",
+      "help": "Single = all on one server. Split DB = app + DB on separate servers. HA = redundant pair of each.",
+      "type": "single",
+      "options": [
+        { "value": "single",   "label": "Single server" },
+        { "value": "split-db", "label": "Split database" },
+        { "value": "ha",       "label": "High-availability cluster" }
+      ]
+    }
+  ]
+}
