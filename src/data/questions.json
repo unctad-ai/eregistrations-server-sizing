@@ -39,9 +39,9 @@
       "help": "Scanned IDs, photos, contracts — anything that ends up stored as a file.",
       "type": "single",
       "options": [
-        { "value": "rarely",    "label": "Rarely" },
+        { "value": "most",      "label": "Most of the time" },
         { "value": "sometimes", "label": "Sometimes" },
-        { "value": "most",      "label": "Most of the time" }
+        { "value": "rarely",    "label": "Rarely" }
       ]
     },
     {
