@@ -64,8 +64,8 @@
       "forcedValues": ["production"],
       "options": [
         { "value": "production", "label": "Production (required)" },
-        { "value": "dev",        "label": "Development" },
-        { "value": "test",       "label": "Test / QA" }
+        { "value": "test",       "label": "Test / QA" },
+        { "value": "dev",        "label": "Development" }
       ]
     },
     {

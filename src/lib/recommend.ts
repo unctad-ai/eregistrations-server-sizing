@@ -94,7 +94,7 @@ export function recommend(answers: Answers): Recommendation {
   const base = pickBracket(avgLoad(answers));
   const prodDisk = adjustedDisk(base, answers);
 
-  const envOrder: Environment[] = ["production", "dev", "test"];
+  const envOrder: Environment[] = ["production", "test", "dev"];
   const cards: EnvironmentCard[] = envOrder
     .filter(env => answers.environments.includes(env))
     .map(env => ({

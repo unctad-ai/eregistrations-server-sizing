@@ -68,7 +68,7 @@ describe("recommend — environment scaling", () => {
 
   it("emits prod + dev + test in order when all selected", () => {
     const r = recommend({ ...baseAnswers, environments: ["production", "dev", "test"] });
-    expect(r.cards.map(c => c.env)).toEqual(["production", "dev", "test"]);
+    expect(r.cards.map(c => c.env)).toEqual(["production", "test", "dev"]);
   });
 
   it("scales dev to half CPU/RAM and rounds disk up to 250 step", () => {
@@ -168,7 +168,7 @@ describe("recommend — anchor fixtures", () => {
       environments: ["production", "dev", "test"], topology: "single"
     });
     expect(r.bracket).toBe("B");
-    expect(r.cards.map(c => c.env)).toEqual(["production", "dev", "test"]);
+    expect(r.cards.map(c => c.env)).toEqual(["production", "test", "dev"]);
   });
 });
 
