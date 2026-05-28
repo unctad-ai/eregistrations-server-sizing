@@ -1,3 +1,13 @@
-/* Tailwind directives added in Task 2 */
-html, body, #root { height: 100%; margin: 0; }
-body { font-family: ui-sans-serif, system-ui, sans-serif; }
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body, #root { height: 100%; }
+body { @apply bg-white text-slate-900 font-sans antialiased; }
+
+@media print {
+  header, footer, .print\:hidden { display: none !important; }
+  main { max-width: none; padding: 0; }
+  .grid { display: block; }
+  .break-inside-avoid { break-inside: avoid; margin-bottom: 1rem; }
+}
