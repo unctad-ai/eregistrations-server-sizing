@@ -94,7 +94,7 @@ export function About() {
       {/* Back button */}
       <div className="pt-2">
         <Link to="/">
-          <Button variant="outline" className="border-obsidian-800 hover:border-obsidian-750 bg-obsidian-900 text-obsidian-200 hover:text-white px-5 py-2 rounded-lg">
+          <Button variant="outline" className="border-obsidian-800 hover:border-obsidian-750 bg-obsidian-900 text-obsidian-200 hover:text-white hover:bg-obsidian-800 px-5 py-2 rounded-lg">
             ← Return to Landing Page
           </Button>
         </Link>
