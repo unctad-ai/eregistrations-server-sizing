@@ -16,7 +16,11 @@ export function decodeAnswers(encoded: string): Answers | null {
   try {
     const json = atob(fromUrlSafe(encoded));
     if (!json.trim().startsWith("{")) return null;
-    return JSON.parse(json) as Answers;
+    const parsed = JSON.parse(json) as Record<string, unknown>;
+    // Reject stale share links from before the database-placement model.
+    if (parsed.postgresql !== "local" && parsed.postgresql !== "external") return null;
+    if (parsed.mongodb !== "local" && parsed.mongodb !== "external") return null;
+    return parsed as unknown as Answers;
   } catch {
     return null;
   }

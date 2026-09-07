@@ -9,7 +9,8 @@ const sample: Answers = {
   attachments: "sometimes",
   horizon: "3y",
   environments: ["production", "dev"],
-  topology: "split-db"
+  postgresql: "local",
+  mongodb: "external"
 };
 
 describe("state encoding", () => {
@@ -23,5 +24,14 @@ describe("state encoding", () => {
 
   it("returns null for malformed input", () => {
     expect(decodeAnswers("garbage!!")).toBeNull();
+  });
+
+  it("returns null for stale links missing database placement", () => {
+    const stale = { ...sample } as Record<string, unknown>;
+    delete stale.postgresql;
+    delete stale.mongodb;
+    stale.topology = "ha"; // legacy field from the topology-era model
+    const encoded = btoa(JSON.stringify(stale)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+    expect(decodeAnswers(encoded)).toBeNull();
   });
 });

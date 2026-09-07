@@ -69,14 +69,23 @@
       ]
     },
     {
-      "id": "topology",
-      "label": "Preferred deployment topology",
-      "help": "Single = all on one server. Split DB = app + DB on separate servers. HA = redundant pair of each.",
+      "id": "postgresql",
+      "label": "Where will PostgreSQL run?",
+      "help": "The installer standard is PostgreSQL 18 on the same server. Choose externally managed only if your ministry or provider operates a managed database service.",
       "type": "single",
       "options": [
-        { "value": "single",   "label": "Single server" },
-        { "value": "split-db", "label": "Split database" },
-        { "value": "ha",       "label": "High-availability cluster" }
+        { "value": "local",    "label": "On this server (installer standard)" },
+        { "value": "external", "label": "Externally managed" }
+      ]
+    },
+    {
+      "id": "mongodb",
+      "label": "Where will MongoDB run?",
+      "help": "The installer runs MongoDB on the same server — as a host install (Ubuntu 24.04) or a container (Ubuntu 26.04). Choose externally managed for a hosted service such as Atlas.",
+      "type": "single",
+      "options": [
+        { "value": "local",    "label": "On this server (installer standard)" },
+        { "value": "external", "label": "Externally managed" }
       ]
     }
   ]

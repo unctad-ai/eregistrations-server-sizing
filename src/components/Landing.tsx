@@ -17,7 +17,7 @@ export function Landing() {
             Size your eRegistrations server in <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent via-emerald-400 to-blue-400">two minutes.</span>
           </h1>
           <p className="text-base sm:text-lg text-obsidian-300 leading-relaxed font-light">
-            Answer seven straight-forward questions about your scope, population, and growth plans. 
+            Answer eight straight-forward questions about your scope, population, and growth plans. 
             We map your answers to three configuration brackets anchored to real operational eRegistrations deployments, producing ready-to-procure specs and cloud SKUs.
           </p>
         </div>
@@ -73,8 +73,8 @@ export function Landing() {
               <div className="flex items-center gap-3">
                 <HardDrive className="h-8 w-8 text-accent animate-pulse-slow" />
                 <div>
-                  <div className="text-xs font-semibold text-obsidian-200 uppercase tracking-wider">Production Cluster</div>
-                  <div className="text-xs text-obsidian-400 font-mono mt-0.5">4x Server Blades (HA Setup)</div>
+                  <div className="text-xs font-semibold text-obsidian-200 uppercase tracking-wider">Production Server</div>
+                  <div className="text-xs text-obsidian-400 font-mono mt-0.5">1x VM · PostgreSQL &amp; MongoDB On-Server</div>
                 </div>
               </div>
               <span className="text-[10px] bg-accent/10 text-accent font-semibold px-2 py-0.5 rounded-full border border-accent/20">Active</span>
@@ -85,8 +85,8 @@ export function Landing() {
               <div className="flex items-center gap-3">
                 <HardDrive className="h-8 w-8 text-blue-400" />
                 <div>
-                  <div className="text-xs font-semibold text-obsidian-300 uppercase tracking-wider">Staging & Testing</div>
-                  <div className="text-xs text-obsidian-400 font-mono mt-0.5">2x Server Blades (Split DB)</div>
+                  <div className="text-xs font-semibold text-obsidian-300 uppercase tracking-wider">Staging &amp; Testing</div>
+                  <div className="text-xs text-obsidian-400 font-mono mt-0.5">1x VM · All-in-One</div>
                 </div>
               </div>
               <span className="text-[10px] bg-blue-500/10 text-blue-400 font-semibold px-2 py-0.5 rounded-full border border-blue-500/20">Standby</span>
@@ -98,7 +98,7 @@ export function Landing() {
                 <HardDrive className="h-8 w-8 text-obsidian-400" />
                 <div>
                   <div className="text-xs font-semibold text-obsidian-400 uppercase tracking-wider">Development Environment</div>
-                  <div className="text-xs text-obsidian-500 font-mono mt-0.5">1x Server Blade (All-In-One)</div>
+                  <div className="text-xs text-obsidian-500 font-mono mt-0.5">1x VM · All-in-One</div>
                 </div>
               </div>
               <span className="text-[10px] bg-obsidian-800 text-obsidian-400 font-semibold px-2 py-0.5 rounded-full">Inactive</span>

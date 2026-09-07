@@ -7,7 +7,7 @@ import {
   FileX, Paperclip, HardDrive,
   Clock, TrendingUp, Award,
   ShieldCheck, Code2, CheckSquare,
-  Monitor, Split, ShieldAlert
+  Database, Cloud, Container
 } from "lucide-react";
 
 interface Props {
@@ -48,10 +48,13 @@ const OPTION_ICONS: Record<string, Record<string, LucideIcon>> = {
     dev: Code2,
     test: CheckSquare
   },
-  topology: {
-    single: Monitor,
-    "split-db": Split,
-    ha: ShieldAlert
+  postgresql: {
+    local: Database,
+    external: Cloud
+  },
+  mongodb: {
+    local: Container,
+    external: Cloud
   }
 };
 
@@ -83,14 +86,17 @@ const OPTION_SUBLABELS: Record<string, Record<string, string>> = {
     "5y": "Maximum stability with 200% growth absorbency buffers."
   },
   environments: {
-    production: "Live cluster. Anchored with highest security and scaling specs.",
+    production: "Live environment. Anchored with highest security and scaling specs.",
     dev: "Sandboxed playground for engineers to test new releases safely.",
     test: "Mirror of production for quality verification and staging."
   },
-  topology: {
-    single: "App & Database colocated on a single node. High-performance backups.",
-    "split-db": "Dedicated secure database host separate from application node.",
-    ha: "Redundant active-passive cluster with integrated load balancing."
+  postgresql: {
+    local: "PostgreSQL 18 installed on the same server. The installer standard.",
+    external: "Managed database service operated by your ministry or provider."
+  },
+  mongodb: {
+    local: "MongoDB on the same server — host install or container, by OS.",
+    external: "Hosted MongoDB service (e.g. Atlas) managed outside this server."
   }
 };
 

@@ -81,6 +81,8 @@ export function Results() {
       md += `#### ${c.env.toUpperCase()} Environment\n`;
       c.servers.forEach((s) => {
         md += `- Role: ${s.role.toUpperCase()} | Specs: ${s.vcpu} vCPU, ${s.ramGiB} GB RAM, ${s.diskGB} GB SSD, ${s.networkGbps} Gbps Port\n`;
+        const ext = s.externalDatabases ?? [];
+        md += `- Databases: PostgreSQL ${ext.includes("postgresql") ? "externally managed" : "on-server"}, MongoDB ${ext.includes("mongodb") ? "externally managed" : "on-server"}\n`;
       });
       md += `- Equivalent Cloud SKUs: AWS (${c.skus.aws}) | Hetzner (${c.skus.hetzner}) | OVH (${c.skus.ovh})\n\n`;
     });

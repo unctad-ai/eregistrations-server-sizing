@@ -4,7 +4,8 @@ export type ApplicationsBucket = "small" | "medium" | "large";
 export type AttachmentLevel = "rarely" | "sometimes" | "most";
 export type Horizon = "1y" | "3y" | "5y";
 export type Environment = "production" | "dev" | "test";
-export type Topology = "single" | "split-db" | "ha";
+export type DbLocality = "local" | "external";
+export type DatabaseKind = "postgresql" | "mongodb";
 
 export interface Answers {
   population: PopulationBucket;
@@ -13,7 +14,8 @@ export interface Answers {
   attachments: AttachmentLevel;
   horizon: Horizon;
   environments: Environment[];
-  topology: Topology;
+  postgresql: DbLocality;
+  mongodb: DbLocality;
 }
 
 export type BracketId = "A" | "B" | "C";
@@ -27,14 +29,7 @@ export interface BaseSpec {
   networkGbps: number;
 }
 
-export type ServerRole =
-  | "all-in-one"
-  | "app"
-  | "db"
-  | "app-1"
-  | "app-2"
-  | "db-1"
-  | "db-2";
+export type ServerRole = "all-in-one" | "app";
 
 export interface ServerSpec {
   role: ServerRole;
@@ -42,6 +37,7 @@ export interface ServerSpec {
   ramGiB: number;
   diskGB: number;
   networkGbps: number;
+  externalDatabases?: DatabaseKind[];
 }
 
 export interface CloudSkus {
@@ -56,7 +52,7 @@ export interface EnvironmentCard {
   skus: CloudSkus;
 }
 
-export type WarningCode = "ha-overkill-for-bracket-a" | "implausible-load-spread";
+export type WarningCode = "implausible-load-spread";
 
 export interface Recommendation {
   bracket: BracketId;

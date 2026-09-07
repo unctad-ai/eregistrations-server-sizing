@@ -1,7 +1,8 @@
 import { useMemo } from "react";
 import type { Answers, ServerRole } from "@/types";
 import { pickBracket } from "@/lib/brackets";
-import { Cpu, HardDrive, Network, Database, LucideIcon } from "lucide-react";
+import { diskMultiplier, externalDatabases, ramReductionGiB } from "@/lib/db-placement";
+import { Cpu, HardDrive, Network, Server, LucideIcon } from "lucide-react";
 
 interface Props {
   answers: Partial<Answers>;
@@ -10,23 +11,13 @@ interface Props {
 const SCORE: Record<string, number> = { small: 1, medium: 2, large: 3 };
 
 const ROLE_ICONS: Record<ServerRole, LucideIcon> = {
-  "all-in-one": Cpu,
-  app: Cpu,
-  db: Database,
-  "app-1": Cpu,
-  "app-2": Cpu,
-  "db-1": Database,
-  "db-2": Database
+  "all-in-one": Server,
+  app: Cpu
 };
 
 const ROLE_LABELS: Record<ServerRole, string> = {
   "all-in-one": "All-in-One Server",
-  app: "App Server",
-  db: "Database Server",
-  "app-1": "App Server 1 (HA)",
-  "app-2": "App Server 2 (HA)",
-  "db-1": "Database Server 1 (HA)",
-  "db-2": "Database Server 2 (HA)"
+  app: "Application Server"
 };
 
 export function ServerRack({ answers }: Props) {
@@ -39,7 +30,8 @@ export function ServerRack({ answers }: Props) {
       attachments: answers.attachments ?? "sometimes",
       horizon: answers.horizon ?? "3y",
       environments: answers.environments ?? ["production"],
-      topology: answers.topology ?? "single"
+      postgresql: answers.postgresql ?? "local",
+      mongodb: answers.mongodb ?? "local"
     };
   }, [answers]);
 
@@ -53,35 +45,20 @@ export function ServerRack({ answers }: Props) {
 
   const bracket = useMemo(() => pickBracket(avgLoad), [avgLoad]);
 
-  // Calculate adjusted disks and server specs
+  // Calculate the single server spec (one VM per environment, matching the installer)
   const servers = useMemo(() => {
-    const topology = activeAnswers.topology;
     const base = bracket;
+    const ext = externalDatabases(activeAnswers);
+    return [{
+      role: (ext.length === 0 ? "all-in-one" : "app") as ServerRole,
+      vcpu: base.vcpu,
+      ram: Math.ceil((base.ramGiB - ramReductionGiB(activeAnswers)) / 8) * 8,
+      disk: Math.ceil((base.diskGB * diskMultiplier(activeAnswers)) / 250) * 250,
+      external: ext
+    }];
+  }, [bracket, activeAnswers]);
 
-    // Single server
-    if (topology === "single") {
-      return [{ role: "all-in-one" as ServerRole, vcpu: base.vcpu, ram: base.ramGiB, disk: base.diskGB }];
-    }
-
-    const appDisk = Math.ceil(base.diskGB / 3);
-    const dbDisk = Math.ceil((base.diskGB * 2) / 3);
-    const dbCpu = Math.ceil(base.vcpu / 2);
-
-    if (topology === "split-db") {
-      return [
-        { role: "app" as ServerRole, vcpu: base.vcpu, ram: base.ramGiB, disk: appDisk },
-        { role: "db" as ServerRole, vcpu: dbCpu, ram: base.ramGiB, disk: dbDisk }
-      ];
-    }
-
-    // ha
-    return [
-      { role: "app-1" as ServerRole, vcpu: base.vcpu, ram: base.ramGiB, disk: appDisk },
-      { role: "app-2" as ServerRole, vcpu: base.vcpu, ram: base.ramGiB, disk: appDisk },
-      { role: "db-1" as ServerRole, vcpu: dbCpu, ram: base.ramGiB, disk: dbDisk },
-      { role: "db-2" as ServerRole, vcpu: dbCpu, ram: base.ramGiB, disk: dbDisk }
-    ];
-  }, [bracket, activeAnswers.topology]);
+  const dbSummary = `PG ${activeAnswers.postgresql === "external" ? "MANAGED" : "LOCAL"} · MONGO ${activeAnswers.mongodb === "external" ? "MANAGED" : "LOCAL"}`;
 
   return (
     <div className="glass-panel p-5 flex flex-col h-full border-obsidian-800/80 shadow-2xl relative overflow-hidden">
@@ -95,7 +72,7 @@ export function ServerRack({ answers }: Props) {
             Live Server Rack Visualizer
           </h3>
           <p className="text-[10px] text-obsidian-400 font-mono mt-0.5">
-            Topology: <span className="text-accent font-semibold">{activeAnswers.topology.toUpperCase()}</span>
+            Databases: <span className="text-accent font-semibold">{dbSummary}</span>
           </p>
         </div>
         <div className="text-right">
@@ -144,6 +121,11 @@ export function ServerRack({ answers }: Props) {
                     <p className="text-[9px] text-obsidian-400 font-mono mt-0.5">
                       {s.vcpu} vCPU · {s.ram} GB RAM · {s.disk} GB NVMe
                     </p>
+                    {s.external.length > 0 && (
+                      <p className="text-[9px] text-blue-400/80 font-mono mt-0.5">
+                        {s.external.map(db => db === "postgresql" ? "PostgreSQL" : "MongoDB").join(" & ")} externally managed
+                      </p>
+                    )}
                   </div>
                 </div>
 
