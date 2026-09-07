@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import type { Answers, ServerRole } from "@/types";
 import { pickBracket } from "@/lib/brackets";
 import { diskMultiplier, externalDatabases, ramReductionGiB } from "@/lib/db-placement";
+import { portsForServer } from "@/lib/ports";
 import { Cpu, HardDrive, Network, Server, LucideIcon } from "lucide-react";
 
 interface Props {
@@ -45,10 +46,12 @@ export function ServerRack({ answers }: Props) {
 
   const bracket = useMemo(() => pickBracket(avgLoad), [avgLoad]);
 
+  // Databases declared externally managed are subtracted from the VM
+  const ext = useMemo(() => externalDatabases(activeAnswers), [activeAnswers]);
+
   // Calculate the single server spec (one VM per environment, matching the installer)
   const servers = useMemo(() => {
     const base = bracket;
-    const ext = externalDatabases(activeAnswers);
     return [{
       role: (ext.length === 0 ? "all-in-one" : "app") as ServerRole,
       vcpu: base.vcpu,
@@ -56,9 +59,19 @@ export function ServerRack({ answers }: Props) {
       disk: Math.ceil((base.diskGB * diskMultiplier(activeAnswers)) / 250) * 250,
       external: ext
     }];
-  }, [bracket, activeAnswers]);
+  }, [bracket, activeAnswers, ext]);
 
   const dbSummary = `PG ${activeAnswers.postgresql === "external" ? "MANAGED" : "LOCAL"} · MONGO ${activeAnswers.mongodb === "external" ? "MANAGED" : "LOCAL"}`;
+
+  // Open ports per the installer firewall role; DB ports appear only while the DB is local
+  const portsSummary = useMemo(() => {
+    const dbPorts = portsForServer({ externalDatabases: ext })
+      .filter(r => r.port === 5432 || r.port === 27017)
+      .map(r => r.port);
+    return dbPorts.length > 0
+      ? `22·80·443 public +${dbPorts.join("·")} app-tier`
+      : "22·80·443 public";
+  }, [ext]);
 
   return (
     <div className="glass-panel p-5 flex flex-col h-full border-obsidian-800/80 shadow-2xl relative overflow-hidden">
@@ -73,6 +86,9 @@ export function ServerRack({ answers }: Props) {
           </h3>
           <p className="text-[10px] text-obsidian-400 font-mono mt-0.5">
             Databases: <span className="text-accent font-semibold">{dbSummary}</span>
+          </p>
+          <p className="text-[10px] text-obsidian-400 font-mono mt-0.5">
+            Ports: <span className="text-accent font-semibold">{portsSummary}</span>
           </p>
         </div>
         <div className="text-right">
@@ -178,7 +194,7 @@ export function ServerRack({ answers }: Props) {
       <div className="mt-4 pt-3 border-t border-obsidian-800/80 flex items-center justify-between text-[10px] text-obsidian-400 font-mono">
         <div className="flex items-center gap-1.5">
           <Network className="h-3.5 w-3.5 text-blue-400 animate-pulse-slow" />
-          <span>{servers.length * bracket.networkGbps} Gbps Aggregate Port</span>
+          <span>{servers.length * bracket.networkGbps} Gbps aggregate link</span>
         </div>
         <div className="flex items-center gap-1.5">
           <HardDrive className="h-3.5 w-3.5 text-accent" />

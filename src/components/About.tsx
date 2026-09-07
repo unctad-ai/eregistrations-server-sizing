@@ -1,4 +1,4 @@
-import { Scale, BookOpen, Layers, ShieldAlert, Database, HardDrive } from "lucide-react";
+import { Scale, BookOpen, Layers, ShieldAlert, Database, HardDrive, Terminal, Gauge, DatabaseBackup } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
@@ -75,6 +75,53 @@ export function About() {
             </h3>
             <p className="text-xs text-obsidian-400 font-light leading-relaxed">
               Every environment is a single VM, matching the architecture of the automated installer. PostgreSQL and MongoDB normally run on that VM; declaring one externally managed subtracts its disk and memory share from the production host.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Platform Requirements */}
+      <div className="space-y-5">
+        <h2 className="text-xs font-bold text-white tracking-widest uppercase font-mono">
+          Platform Requirements
+        </h2>
+        <div className="grid gap-6 sm:grid-cols-3">
+          {/* OS */}
+          <div className="glass-panel p-5 border-obsidian-850 bg-obsidian-900/40 space-y-3">
+            <div className="p-2 h-9 w-9 rounded-lg bg-accent/10 border border-accent/20 text-accent flex items-center justify-center">
+              <Terminal className="h-5 w-5" />
+            </div>
+            <h3 className="text-sm font-bold text-white uppercase tracking-wider font-heading">
+              Operating System
+            </h3>
+            <p className="text-xs text-obsidian-400 font-light leading-relaxed">
+              Ubuntu 24.04 or 26.04 LTS, hard-enforced by the installer preflight. MongoDB installs directly on the host only on 24.04; on 26.04 the installer runs it containerized.
+            </p>
+          </div>
+
+          {/* Installer floor */}
+          <div className="glass-panel p-5 border-obsidian-850 bg-obsidian-900/40 space-y-3">
+            <div className="p-2 h-9 w-9 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center">
+              <Gauge className="h-5 w-5" />
+            </div>
+            <h3 className="text-sm font-bold text-white uppercase tracking-wider font-heading">
+              Installer Floor
+            </h3>
+            <p className="text-xs text-obsidian-400 font-light leading-relaxed">
+              Hard minimum of 4 vCPU, 8 GB RAM and 100 GB disk. The platform stack occupies ~50 GB and the image pull another ~26 GB; the brackets on this site deliberately size above that floor to leave room for production growth.
+            </p>
+          </div>
+
+          {/* Backup headroom */}
+          <div className="glass-panel p-5 border-obsidian-850 bg-obsidian-900/40 space-y-3">
+            <div className="p-2 h-9 w-9 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center">
+              <DatabaseBackup className="h-5 w-5" />
+            </div>
+            <h3 className="text-sm font-bold text-white uppercase tracking-wider font-heading">
+              Backup Headroom
+            </h3>
+            <p className="text-xs text-obsidian-400 font-light leading-relaxed">
+              Nightly dumps run at 00:00, keeping 14 generations plus the newest 3 on the same local volume; a 16 GB swapfile sits on the root volume. Budget disk accordingly.
             </p>
           </div>
         </div>
