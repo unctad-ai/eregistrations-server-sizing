@@ -2,8 +2,6 @@ import type { WarningCode } from "@/types";
 import { AlertTriangle } from "lucide-react";
 
 const MESSAGES: Record<WarningCode, string> = {
-  "ha-overkill-for-bracket-a":
-    "HA clustering generally only yields positive ROI at Bracket B+. For small deployments, a single-node topology with robust automated snapshots and backup schemes is recommended.",
   "implausible-load-spread":
     "Your questionnaire results span a wide mathematical variance (e.g., massive population but extremely low application counts). Please review step 2 and 3 inputs to ensure procurement accuracy."
 };

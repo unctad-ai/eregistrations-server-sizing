@@ -1,4 +1,4 @@
-import { Scale, BookOpen, Layers, ShieldAlert, Cpu, HardDrive } from "lucide-react";
+import { Scale, BookOpen, Layers, ShieldAlert, Database, HardDrive } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
@@ -68,13 +68,13 @@ export function About() {
           {/* Card 4 */}
           <div className="glass-panel p-5 border-obsidian-850 bg-obsidian-900/40 space-y-3">
             <div className="p-2 h-9 w-9 rounded-lg bg-accent/10 border border-accent/20 text-accent flex items-center justify-center">
-              <Cpu className="h-5 w-5" />
+              <Database className="h-5 w-5" />
             </div>
             <h3 className="text-sm font-bold text-white uppercase tracking-wider font-heading">
-              4. Topology Decomposition
+              4. Database Placement
             </h3>
             <p className="text-xs text-obsidian-400 font-light leading-relaxed">
-              The aggregate resources are divided based on topology. A split DB splits compute into application and database nodes, while high-availability allocates redundant clusters across all domains.
+              Every environment is a single VM, matching the architecture of the automated installer. PostgreSQL and MongoDB normally run on that VM; declaring one externally managed subtracts its disk and memory share from the production host.
             </p>
           </div>
         </div>

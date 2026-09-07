@@ -1,9 +1,9 @@
-import type { EnvironmentCard, ServerRole } from "@/types";
+import type { EnvironmentCard, ServerSpec, ServerRole } from "@/types";
 import { Cpu, Cloud, Server } from "lucide-react";
 
 const ENV_LABELS: Record<EnvironmentCard["env"], { title: string; style: string; badge: string }> = {
   production: {
-    title: "Production Cluster",
+    title: "Production",
     style: "border-accent/40 bg-accent/5 shadow-accent/5",
     badge: "bg-accent/10 text-accent border-accent/20"
   },
@@ -13,7 +13,7 @@ const ENV_LABELS: Record<EnvironmentCard["env"], { title: string; style: string;
     badge: "bg-blue-500/10 text-blue-400 border-blue-500/20"
   },
   test: {
-    title: "Test / QA Cluster",
+    title: "Test / QA",
     style: "border-indigo-500/30 bg-indigo-500/5 shadow-indigo-500/5",
     badge: "bg-indigo-500/10 text-indigo-400 border-indigo-500/20"
   }
@@ -21,13 +21,15 @@ const ENV_LABELS: Record<EnvironmentCard["env"], { title: string; style: string;
 
 const ROLE_LABEL: Record<ServerRole, string> = {
   "all-in-one": "All-in-One Server",
-  app: "Application server Node",
-  db: "Secure Database Server",
-  "app-1": "App Server 1 (Primary HA)",
-  "app-2": "App Server 2 (Secondary HA)",
-  "db-1": "Database Server 1 (Active HA)",
-  "db-2": "Database Server 2 (Standby HA)"
+  app: "Application Server"
 };
+
+function databasesLine(s: ServerSpec): string {
+  const ext = s.externalDatabases ?? [];
+  const label = (db: "postgresql" | "mongodb") =>
+    `${db === "postgresql" ? "PostgreSQL" : "MongoDB"} ${ext.includes(db) ? "externally managed" : "on this server"}`;
+  return `${label("postgresql")} · ${label("mongodb")}`;
+}
 
 export function RecommendationCard({ card }: { card: EnvironmentCard }) {
   const envMeta = ENV_LABELS[card.env];
@@ -50,7 +52,7 @@ export function RecommendationCard({ card }: { card: EnvironmentCard }) {
           {card.servers.map((s, i) => (
             <li key={i} className="flex gap-4 p-3 bg-obsidian-950/60 rounded-xl border border-obsidian-850/60 hover:border-obsidian-800 transition-colors">
               <div className="p-2 h-9 w-9 rounded-lg bg-obsidian-900 border border-obsidian-800 flex items-center justify-center text-obsidian-400 mt-0.5">
-                {s.role.includes("db") ? <Server className="h-4 w-4 text-blue-400" /> : <Cpu className="h-4 w-4 text-accent" />}
+                {s.role === "app" ? <Cpu className="h-4 w-4 text-accent" /> : <Server className="h-4 w-4 text-accent" />}
               </div>
               <div className="space-y-1">
                 <div className="text-xs font-semibold text-obsidian-100 uppercase tracking-wider">{ROLE_LABEL[s.role]}</div>
@@ -62,6 +64,9 @@ export function RecommendationCard({ card }: { card: EnvironmentCard }) {
                   <span>{s.diskGB} GB NVMe SSD</span>
                   <span className="text-obsidian-700">•</span>
                   <span className="text-accent/80 font-semibold">{s.networkGbps} Gbps Port</span>
+                </div>
+                <div className="text-[10px] text-obsidian-500 font-mono">
+                  Databases: {databasesLine(s)}
                 </div>
               </div>
             </li>

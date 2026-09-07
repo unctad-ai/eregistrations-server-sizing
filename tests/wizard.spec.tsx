@@ -24,8 +24,8 @@ describe("Wizard", () => {
   it("shows 'See recommendation' on the last step", async () => {
     setup();
     const user = userEvent.setup();
-    // Advance through 6 of 7 questions
-    for (let i = 0; i < 6; i++) {
+    // Advance through 7 of 8 questions
+    for (let i = 0; i < 7; i++) {
       const options = screen.queryAllByRole("radio");
       if (options.length > 0) {
         await user.click(options[0]!);

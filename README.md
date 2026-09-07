@@ -4,7 +4,7 @@ Static web tool that recommends a server configuration for new eRegistrations co
 
 ## What it does
 
-Answer seven bucketed questions (country population, services launched, expected applications, document upload frequency, planning horizon, environments needed, topology). The tool maps your answers to one of three configuration brackets anchored to real measurements from existing eRegistrations deployments, and produces a procurement-ready spec including cloud SKU equivalents (AWS, Hetzner, OVH).
+Answer eight bucketed questions (country population, services launched, expected applications, document upload frequency, planning horizon, environments needed, PostgreSQL placement, MongoDB placement). The tool maps your answers to one of three configuration brackets anchored to real measurements from existing eRegistrations deployments, and produces a procurement-ready spec including cloud SKU equivalents (AWS, Hetzner, OVH). Every environment is a single VM, matching the automated installer's architecture; databases declared externally managed subtract their disk and memory share from the production host.
 
 ## Run locally
 
