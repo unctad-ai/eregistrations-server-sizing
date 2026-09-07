@@ -1,4 +1,5 @@
 import type { EnvironmentCard, ServerSpec, ServerRole } from "@/types";
+import { portsForServer, formatPorts } from "@/lib/ports";
 import { Cpu, Cloud, Server } from "lucide-react";
 
 const ENV_LABELS: Record<EnvironmentCard["env"], { title: string; style: string; badge: string }> = {
@@ -47,6 +48,11 @@ export function RecommendationCard({ card }: { card: EnvironmentCard }) {
           </span>
         </div>
 
+        {/* OS requirement */}
+        <div className="text-[10px] text-obsidian-500 font-mono mb-4">
+          OS: Ubuntu 24.04 / 26.04 LTS
+        </div>
+
         {/* Server Specs List */}
         <ul className="space-y-4">
           {card.servers.map((s, i) => (
@@ -63,10 +69,13 @@ export function RecommendationCard({ card }: { card: EnvironmentCard }) {
                   <span className="text-obsidian-700">•</span>
                   <span>{s.diskGB} GB NVMe SSD</span>
                   <span className="text-obsidian-700">•</span>
-                  <span className="text-accent/80 font-semibold">{s.networkGbps} Gbps Port</span>
+                  <span className="text-accent/80 font-semibold">{s.networkGbps} Gbps network link</span>
                 </div>
                 <div className="text-[10px] text-obsidian-500 font-mono">
                   Databases: {databasesLine(s)}
+                </div>
+                <div className="text-[10px] text-obsidian-500 font-mono">
+                  Ports: {formatPorts(portsForServer(s))}
                 </div>
               </div>
             </li>

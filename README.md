@@ -4,7 +4,7 @@ Static web tool that recommends a server configuration for new eRegistrations co
 
 ## What it does
 
-Answer eight bucketed questions (country population, services launched, expected applications, document upload frequency, planning horizon, environments needed, PostgreSQL placement, MongoDB placement). The tool maps your answers to one of three configuration brackets anchored to real measurements from existing eRegistrations deployments, and produces a procurement-ready spec including cloud SKU equivalents (AWS, Hetzner, OVH). Every environment is a single VM, matching the automated installer's architecture; databases declared externally managed subtract their disk and memory share from the production host.
+Answer eight bucketed questions (country population, services launched, expected applications, document upload frequency, planning horizon, environments needed, PostgreSQL placement, MongoDB placement). The tool maps your answers to one of three configuration brackets anchored to real measurements from existing eRegistrations deployments, and produces a procurement-ready spec including cloud SKU equivalents (AWS, Hetzner, OVH). Every environment is a single VM, matching the automated installer's architecture; databases declared externally managed subtract their disk and memory share from the production host. The spec also documents the open ports (22/80/443 public, database ports restricted to the app tier), the OS requirement (Ubuntu 24.04/26.04 LTS), the installer minimum floor, and backup disk headroom.
 
 ## Run locally
 

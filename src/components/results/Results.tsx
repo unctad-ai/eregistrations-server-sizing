@@ -2,13 +2,14 @@ import { useMemo, useState } from "react";
 import { useSearchParams, Link, useNavigate } from "react-router-dom";
 import { decodeAnswers } from "@/lib/state";
 import { recommend } from "@/lib/recommend";
+import { portsForServer, formatPorts } from "@/lib/ports";
 import { RecommendationCard } from "@/components/results/RecommendationCard";
 import { RationaleBlock } from "@/components/results/RationaleBlock";
 import { Warnings } from "@/components/results/Warnings";
 import { Button } from "@/components/ui/button";
 import { 
   Printer, Link2, Edit3, 
-  Check, FileSpreadsheet, ShieldCheck 
+  Check, FileSpreadsheet, ShieldCheck, Info 
 } from "lucide-react";
 
 const BRACKET_NAMES: Record<string, string> = {
@@ -79,10 +80,12 @@ export function Results() {
     md += `*Calibrated Sizing: Bracket ${r.bracket} - ${BRACKET_NAMES[r.bracket]}*\n\n`;
     r.cards.forEach((c) => {
       md += `#### ${c.env.toUpperCase()} Environment\n`;
+      md += `- OS: Ubuntu 24.04 / 26.04 LTS\n`;
       c.servers.forEach((s) => {
-        md += `- Role: ${s.role.toUpperCase()} | Specs: ${s.vcpu} vCPU, ${s.ramGiB} GB RAM, ${s.diskGB} GB SSD, ${s.networkGbps} Gbps Port\n`;
+        md += `- Role: ${s.role.toUpperCase()} | Specs: ${s.vcpu} vCPU, ${s.ramGiB} GB RAM, ${s.diskGB} GB SSD, ${s.networkGbps} Gbps network link\n`;
         const ext = s.externalDatabases ?? [];
         md += `- Databases: PostgreSQL ${ext.includes("postgresql") ? "externally managed" : "on-server"}, MongoDB ${ext.includes("mongodb") ? "externally managed" : "on-server"}\n`;
+        md += `- Ports: ${formatPorts(portsForServer(s))}\n`;
       });
       md += `- Equivalent Cloud SKUs: AWS (${c.skus.aws}) | Hetzner (${c.skus.hetzner}) | OVH (${c.skus.ovh})\n\n`;
     });
@@ -160,6 +163,20 @@ export function Results() {
             <RecommendationCard key={c.env} card={c} />
           ))}
         </div>
+      </div>
+
+      {/* Installer floor & backup headroom notes */}
+      <div className="glass-panel border-obsidian-850 p-5 space-y-2.5">
+        <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-obsidian-400 font-mono">
+          <Info className="h-3.5 w-3.5 text-accent" />
+          <span>Installer Floor and Backup Headroom</span>
+        </div>
+        <p className="text-[11px] text-obsidian-400 font-light leading-relaxed">
+          The automated installer’s hard minimum is 4 vCPU / 8 GB RAM / 100 GB disk — the platform stack alone occupies ~50 GB. These brackets size comfortably above that floor.
+        </p>
+        <p className="text-[11px] text-obsidian-400 font-light leading-relaxed">
+          Local nightly backups keep 14 dump generations (plus the newest 3) on the same volume, and the installer adds a 16 GB swapfile — disk allowances include this headroom.
+        </p>
       </div>
 
       {/* Action panel */}

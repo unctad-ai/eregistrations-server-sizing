@@ -49,4 +49,27 @@ describe("Results page", () => {
     );
     expect(screen.getByText(/No sizing session details detected/)).toBeInTheDocument();
   });
+
+  it("shows the OS requirement on the environment card", () => {
+    renderWith(base);
+    expect(screen.getByText("OS: Ubuntu 24.04 / 26.04 LTS")).toBeInTheDocument();
+  });
+
+  it("shows a ports line with the public edge ports and local database ports", () => {
+    renderWith(base);
+    expect(screen.getByText(/Ports: 22, 80, 443 public/)).toBeInTheDocument();
+    expect(screen.getByText(/5432 PostgreSQL \(internal\)/)).toBeInTheDocument();
+  });
+
+  it("omits the PostgreSQL port when both databases are external", () => {
+    renderWith({ ...base, postgresql: "external", mongodb: "external" });
+    expect(screen.getByText(/Ports: 22, 80, 443 public/)).toBeInTheDocument();
+    expect(screen.queryByText(/5432/)).not.toBeInTheDocument();
+  });
+
+  it("mentions the installer hard minimum in the notes panel", () => {
+    renderWith(base);
+    expect(screen.getByText(/hard minimum is 4 vCPU \/ 8 GB RAM \/ 100 GB disk/)).toBeInTheDocument();
+    expect(screen.getByText(/16 GB swapfile/)).toBeInTheDocument();
+  });
 });
